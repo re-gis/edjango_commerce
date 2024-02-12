@@ -188,6 +188,15 @@
         "documentation": {}
     },
     {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
         "label": "render",
         "importPath": "django.shortcuts",
         "description": "django.shortcuts",
@@ -225,6 +234,14 @@
         "description": "store.models",
         "isExtraImport": true,
         "detail": "store.models",
+        "documentation": {}
+    },
+    {
+        "label": "JsonResponse",
+        "importPath": "django.http",
+        "description": "django.http",
+        "isExtraImport": true,
+        "detail": "django.http",
         "documentation": {}
     },
     {
@@ -511,7 +528,7 @@
         "kind": 5,
         "importPath": "store.urls",
         "description": "store.urls",
-        "peekOfCode": "urlpatterns = [\n    path(\"\", views.store, name=\"store\"),\n    path(\"cart/\", views.cart, name=\"cart\"),\n    path(\"checkout/\", views.checkout, name=\"checkout\"),\n]",
+        "peekOfCode": "urlpatterns = [\n    path(\"\", views.store, name=\"store\"),\n    path(\"cart/\", views.cart, name=\"cart\"),\n    path(\"checkout/\", views.checkout, name=\"checkout\"),\n    path(\"update_item/\", views.updateItem, name=\"update_item\"),\n]",
         "detail": "store.urls",
         "documentation": {}
     },
@@ -520,7 +537,7 @@
         "kind": 2,
         "importPath": "store.views",
         "description": "store.views",
-        "peekOfCode": "def store(request):\n    products = Product.objects.all()\n    context = {\"products\": products}\n    return render(request, \"store/Store.html\", context)\ndef cart(request):\n    if request.user.is_authenticated:\n        customer = request.user.customer\n        order, created = Order.objects.get_or_create(customer=customer, complete=False)\n        items = order.orderitem_set.all()\n    else:",
+        "peekOfCode": "def store(request):\n    if request.user.is_authenticated:\n        customer = request.user.customer\n        order, created = Order.objects.get_or_create(customer=customer, complete=False)\n        items = order.orderitem_set.all()\n        cartItems = order.get_cart_items\n    else:\n        items = []\n        order = {\"get_cart_items\": 0, \"get_cart_total\": 0}\n        cartItems = order[\"get_cart_items\"]",
         "detail": "store.views",
         "documentation": {}
     },
@@ -529,7 +546,7 @@
         "kind": 2,
         "importPath": "store.views",
         "description": "store.views",
-        "peekOfCode": "def cart(request):\n    if request.user.is_authenticated:\n        customer = request.user.customer\n        order, created = Order.objects.get_or_create(customer=customer, complete=False)\n        items = order.orderitem_set.all()\n    else:\n        items = []\n        order = {\"get_cart_items\": 0, \"get_cart_total\": 0}\n    context = {\"items\": items, \"order\": order}\n    return render(request, \"store/Cart.html\", context)",
+        "peekOfCode": "def cart(request):\n    if request.user.is_authenticated:\n        customer = request.user.customer\n        order, created = Order.objects.get_or_create(customer=customer, complete=False)\n        items = order.orderitem_set.all()\n        cartItems = order.get_cart_items\n    else:\n        items = []\n        order = {\"get_cart_items\": 0, \"get_cart_total\": 0}\n        cartItems = order",
         "detail": "store.views",
         "documentation": {}
     },
@@ -538,7 +555,16 @@
         "kind": 2,
         "importPath": "store.views",
         "description": "store.views",
-        "peekOfCode": "def checkout(request):\n    \"\"\"\n    first I have to get the orderitems to render to the template\n    \"\"\"\n    if request.user.is_authenticated:\n        customer = request.user.customer\n        order, created = Order.objects.get_or_create(customer=customer, complete=False)\n        items = order.orderitem_set.all()\n    else:\n        items = []",
+        "peekOfCode": "def checkout(request):\n    \"\"\"\n    first I have to get the orderitems to render to the template\n    \"\"\"\n    if request.user.is_authenticated:\n        customer = request.user.customer\n        order, created = Order.objects.get_or_create(customer=customer, complete=False)\n        items = order.orderitem_set.all()\n        cartItems = order.get_cart_items\n    else:",
+        "detail": "store.views",
+        "documentation": {}
+    },
+    {
+        "label": "updateItem",
+        "kind": 2,
+        "importPath": "store.views",
+        "description": "store.views",
+        "peekOfCode": "def updateItem(request):\n    data = json.loads(request.body)\n    productId = data[\"productId\"]\n    action = data[\"action\"]\n    customer = request.user.customer\n    product = Product.objects.get(id=productId)\n    order, created = Order.objects.get_or_create(customer=customer, complete=False)\n    orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)\n    if action == \"add\":\n        orderItem.quantity = orderItem.quantity + 1",
         "detail": "store.views",
         "documentation": {}
     },

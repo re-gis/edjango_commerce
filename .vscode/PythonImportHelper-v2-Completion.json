@@ -237,11 +237,28 @@
         "documentation": {}
     },
     {
+        "label": "ShippingAddress",
+        "importPath": "store.models",
+        "description": "store.models",
+        "isExtraImport": true,
+        "detail": "store.models",
+        "documentation": {}
+    },
+    {
         "label": "JsonResponse",
         "importPath": "django.http",
         "description": "django.http",
         "isExtraImport": true,
         "detail": "django.http",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "datetime",
+        "description": "datetime",
+        "detail": "datetime",
         "documentation": {}
     },
     {
@@ -528,7 +545,7 @@
         "kind": 5,
         "importPath": "store.urls",
         "description": "store.urls",
-        "peekOfCode": "urlpatterns = [\n    path(\"\", views.store, name=\"store\"),\n    path(\"cart/\", views.cart, name=\"cart\"),\n    path(\"checkout/\", views.checkout, name=\"checkout\"),\n    path(\"update_item/\", views.updateItem, name=\"update_item\"),\n]",
+        "peekOfCode": "urlpatterns = [\n    path(\"\", views.store, name=\"store\"),\n    path(\"cart/\", views.cart, name=\"cart\"),\n    path(\"checkout/\", views.checkout, name=\"checkout\"),\n    path(\"update_item/\", views.updateItem, name=\"update_item\"),\n    path(\"process_order/\", views.prodessOrder, name=\"process_order\"),\n]",
         "detail": "store.urls",
         "documentation": {}
     },
@@ -565,6 +582,15 @@
         "importPath": "store.views",
         "description": "store.views",
         "peekOfCode": "def updateItem(request):\n    data = json.loads(request.body)\n    productId = data[\"productId\"]\n    action = data[\"action\"]\n    customer = request.user.customer\n    product = Product.objects.get(id=productId)\n    order, created = Order.objects.get_or_create(customer=customer, complete=False)\n    orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)\n    if action == \"add\":\n        orderItem.quantity = orderItem.quantity + 1",
+        "detail": "store.views",
+        "documentation": {}
+    },
+    {
+        "label": "prodessOrder",
+        "kind": 2,
+        "importPath": "store.views",
+        "description": "store.views",
+        "peekOfCode": "def prodessOrder(request):\n    transaction_id = datetime.datetime.now().timestamp()\n    data = json.loads(request.body)\n    if request.user.is_authenticated():\n        customer = request.user.customer\n        order, created = Order.objects.get_or_create(customer=customer, complete=False)\n        total = float(data[\"form\"][\"total\"])\n        order.transaction_id = transaction_id\n        if total == order.get_cart_total:\n            order.complete = True",
         "detail": "store.views",
         "documentation": {}
     },

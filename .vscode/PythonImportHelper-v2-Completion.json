@@ -483,7 +483,7 @@
         "kind": 6,
         "importPath": "store.models",
         "description": "store.models",
-        "peekOfCode": "class Customer(models.Model):\n    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)\n    name = models.CharField(max_length=200, null=True)\n    email = models.CharField(max_length=200, null=True)\n    def __str__(self) -> str:\n        return self.name\nclass Product(models.Model):\n    name = models.CharField(max_length=200, null=True)\n    price = models.FloatField()\n    digital = models.BooleanField(default=False, null=True, blank=True)",
+        "peekOfCode": "class Customer(models.Model):\n    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)\n    name = models.CharField(max_length=200, null=True)\n    email = models.CharField(max_length=200, null=True)\n    def __str__(self) -> str:\n        return self.name\nclass Product(models.Model):\n    name = models.CharField(max_length=200, null=True)\n    price = models.FloatField()\n    digital = models.BooleanField(default=False, null=True, blank=False)",
         "detail": "store.models",
         "documentation": {}
     },
@@ -492,7 +492,7 @@
         "kind": 6,
         "importPath": "store.models",
         "description": "store.models",
-        "peekOfCode": "class Product(models.Model):\n    name = models.CharField(max_length=200, null=True)\n    price = models.FloatField()\n    digital = models.BooleanField(default=False, null=True, blank=True)\n    image = models.ImageField(null=True, blank=True)\n    def __str__(self) -> str:\n        return self.name\n    @property\n    def imageURL(self) -> str:\n        try:",
+        "peekOfCode": "class Product(models.Model):\n    name = models.CharField(max_length=200, null=True)\n    price = models.FloatField()\n    digital = models.BooleanField(default=False, null=True, blank=False)\n    image = models.ImageField(null=True, blank=True)\n    def __str__(self) -> str:\n        return self.name\n    @property\n    def imageURL(self) -> str:\n        try:",
         "detail": "store.models",
         "documentation": {}
     },
@@ -537,7 +537,7 @@
         "kind": 2,
         "importPath": "store.views",
         "description": "store.views",
-        "peekOfCode": "def store(request):\n    if request.user.is_authenticated:\n        customer = request.user.customer\n        order, created = Order.objects.get_or_create(customer=customer, complete=False)\n        items = order.orderitem_set.all()\n        cartItems = order.get_cart_items\n    else:\n        items = []\n        order = {\"get_cart_items\": 0, \"get_cart_total\": 0}\n        cartItems = order[\"get_cart_items\"]",
+        "peekOfCode": "def store(request):\n    if request.user.is_authenticated:\n        customer = request.user.customer\n        order, created = Order.objects.get_or_create(customer=customer, complete=False)\n        items = order.orderitem_set.all()\n        cartItems = order.get_cart_items\n    else:\n        items = []\n        order = {\"get_cart_items\": 0, \"get_cart_total\": 0, \"shipping\": False}\n        cartItems = order[\"get_cart_items\"]",
         "detail": "store.views",
         "documentation": {}
     },
@@ -546,7 +546,7 @@
         "kind": 2,
         "importPath": "store.views",
         "description": "store.views",
-        "peekOfCode": "def cart(request):\n    if request.user.is_authenticated:\n        customer = request.user.customer\n        order, created = Order.objects.get_or_create(customer=customer, complete=False)\n        items = order.orderitem_set.all()\n        cartItems = order.get_cart_items\n    else:\n        items = []\n        order = {\"get_cart_items\": 0, \"get_cart_total\": 0}\n        cartItems = order",
+        "peekOfCode": "def cart(request):\n    if request.user.is_authenticated:\n        customer = request.user.customer\n        order, created = Order.objects.get_or_create(customer=customer, complete=False)\n        items = order.orderitem_set.all()\n        cartItems = order.get_cart_items\n    else:\n        items = []\n        order = {\"get_cart_items\": 0, \"get_cart_total\": 0, \"shipping\": False}\n        cartItems = order",
         "detail": "store.views",
         "documentation": {}
     },
